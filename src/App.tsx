@@ -16,6 +16,7 @@ import { MockInterviewPage } from "./routes/mock-interview-page";
 import { Feedback } from "./routes/feedback";
 import Learn from "./components/learn";
 import Practice from "./components/practice";
+import Notes from "./components/notes";
 
 const App = () => {
   return (
@@ -43,6 +44,7 @@ const App = () => {
           {/* add all the protect routes */}
           <Route path="/learn" element={<Learn/>} />
           <Route path="/practice" element={<Practice/>} />
+          <Route path="/notes" element={<Notes/>} />
           <Route element={<Generate />} path="/generate">
             <Route index element={<Dashboard />} />
             <Route path=":interviewId" element={<CreateEditPage />} />

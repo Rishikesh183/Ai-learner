@@ -12,7 +12,7 @@ export const MainRoutes = [
     href: "/practice",
   },
   {
-    label: "chat",
-    href: "/chat",
+    label: "Notes",
+    href: "/notes",
   },
 ];
