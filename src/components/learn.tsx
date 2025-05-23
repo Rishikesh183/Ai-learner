@@ -72,29 +72,44 @@ const Learn = () => {
     };
 
     const generatePDF = async () => {
-        if (!user?.id) {
-            console.error("User must be logged in to generate PDFs.");
-            return;
-        }
-
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth() - 20;
         const lines = doc.splitTextToSize(content, pageWidth);
+    
         doc.setFont("times", "normal");
+        doc.setFontSize(14);
         doc.text(`Study Material: ${topic}`, 10, 10);
         doc.setFontSize(12);
         doc.text(lines, 10, 20);
+        doc.save(`${topic}.pdf`);
+    };
+    
 
+    const savePDF = async () => {
+        if (!user?.id) {
+            console.error("User must be logged in to save PDFs.");
+            return;
+        }
+    
+        const doc = new jsPDF();
+        const pageWidth = doc.internal.pageSize.getWidth() - 20;
+        const lines = doc.splitTextToSize(content, pageWidth);
+    
+        doc.setFont("times", "normal");
+        doc.setFontSize(14);
+        doc.text(`Study Material: ${topic}`, 10, 10);
+        doc.setFontSize(12);
+        doc.text(lines, 10, 20);
+    
         const pdfBlob = doc.output("blob");
-
+    
         // Convert Blob to Base64
         const reader = new FileReader();
         reader.readAsDataURL(pdfBlob);
         reader.onloadend = async () => {
             const pdfBase64 = reader.result as string;
-
+    
             try {
-                // Store in Firestore
                 await addDoc(collection(db, "pdfs"), {
                     title: topic,
                     pdfUrl: pdfBase64,
@@ -102,14 +117,15 @@ const Learn = () => {
                     timestamp: new Date(),
                     pdfData: content,
                 });
-
+    
                 console.log("✅ PDF saved to Firestore!");
-                loadPDFs(); // Refresh PDF list
+                loadPDFs(); 
             } catch (error) {
                 console.error("❌ Error saving PDF to Firestore:", error);
             }
         };
     };
+
 
     const suggestNextTopic = async () => {
         if (suggestedContent.length === 0) return;
@@ -161,7 +177,7 @@ const Learn = () => {
                     </button>
                 </div>
                 {aiSuggestion.length>0 && <div className="font-bold text-lg flex justify-center mt-4 text-red-600">Now You should learn {aiSuggestion} </div>}
-                {content && <PDFViewer content={content} generatePDF={generatePDF} />}
+                {content && <PDFViewer content={content} generatePDF={generatePDF} savePDF={savePDF}  />}
             </div>
             <div className="mt-6 flex flex-col items-center pb-6 p-2">
                 <h2 className="text-xl font-semibold mb-3 mt-3">Previously Generated PDFs</h2>
@@ -171,7 +187,7 @@ const Learn = () => {
                     <ul className="space-y-4">
                         {pdfs.map((pdf) => (
                             <div key={pdf.id} className="border p-2 rounded bg-gray-100">
-                                {<PDFViewer content={pdf.pdfData} generatePDF={generatePDF} />}
+                                {<PDFViewer content={pdf.pdfData} generatePDF={generatePDF} savePDF={savePDF} />}
                             </div>
                         ))}
                     </ul>

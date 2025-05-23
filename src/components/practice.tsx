@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import WebSearch from "./webSearch"; // Import WebSearch
+import WebSearch from "./webSearch";
 
 const Practice: React.FC = () => {
   const [topic, setTopic] = useState("");
@@ -11,7 +11,7 @@ const Practice: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const searchInWeb = () => {
-    setSearchQuery(topic); 
+    setSearchQuery(topic);
   };
 
   const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
@@ -36,6 +36,7 @@ const Practice: React.FC = () => {
 
       try {
         const jsonData = JSON.parse(cleanedResponse);
+        console.log(jsonData);
         const questionsArray = jsonData.map((item: { question: string }) => item.question);
         const answerArray = jsonData.map((item: { answer: string }) => item.answer);
         setAnswers(answerArray);
@@ -64,22 +65,27 @@ const Practice: React.FC = () => {
         value={topic}
         onChange={(e) => setTopic(e.target.value)}
       />
-      <button
-        onClick={searchInWeb}
-        className="bg-gray-500 text-white px-4 py-2 rounded"
-      >
-        Search in Web
-      </button>
-
       {searchQuery && <WebSearch topic={searchQuery} />}
+      <div className="flex gap-3">
+        <button
+          onClick={searchInWeb}
 
-      <button
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-        onClick={generateContent}
-        disabled={loading}
-      >
-        {loading ? "Generating..." : "Generate AI Questions"}
-      </button>
+          className="bg-gray-500 text-white px-4 py-2 rounded"
+        >
+          Search in Web
+        </button>
+
+
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+          onClick={generateContent}
+          disabled={loading}
+        >
+          {loading ? "Generating..." : "Generate AI Questions"}
+        </button>
+
+
+      </div>
 
       {content.length > 0 && (
         <div className="mt-4 p-2 border rounded">

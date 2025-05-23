@@ -19,11 +19,11 @@ const HomePage = () => {
               - A better way to
             </span>
             <br />
-            improve your interview chances and skills
+            improve your skills is by Learning 
           </h2>
 
           <p className="mt-4 text-muted-foreground text-sm">
-            Boost your interview skills and increase your success rate with
+            Boost your skills and increase your success rate with
             AI-driven insights. Discover a smarter way to prepare, practice, and
             stand out.
           </p>
@@ -31,15 +31,15 @@ const HomePage = () => {
 
         <div className="flex w-full items-center justify-evenly md:px-12 md:py-16 md:items-center md:justify-end gap-12">
           <p className="text-3xl font-semibold text-gray-900 text-center">
-            250k+
+            5k+
             <span className="block text-xl text-muted-foreground font-normal">
-              Offers Recieved
+              Students 
             </span>
           </p>
           <p className="text-3xl font-semibold text-gray-900 text-center">
-            1.2M+
+            250k+
             <span className="block text-xl text-muted-foreground font-normal">
-              Interview Aced
+              Content Generated
             </span>
           </p>
         </div>
@@ -53,19 +53,20 @@ const HomePage = () => {
           />
 
           <div className="absolute top-4 left-4 px-4 py-2 rounded-md bg-white/40 backdrop-blur-md">
-            Inteviews Copilot&copy;
+            AI Learner&copy;
           </div>
 
           <div className="hidden md:block absolute w-80 bottom-4 right-4 px-4 py-2 rounded-md bg-white/60 backdrop-blur-md">
             <h2 className="text-neutral-800 font-semibold">Developer</h2>
             <p className="text-sm text-neutral-500">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam
-              distinctio natus, quos voluptatibus magni sapiente.
+              Start Your Learning Journey from today , we provide best AI assistance to sharpen Your skills and make you Industry ready
             </p>
 
-            <Button className="mt-3">
-              Generate <Sparkles />
-            </Button>
+            <Link to={"/learn"} className="w-full">
+              <Button className="mt-3">
+                Learn <Sparkles />
+              </Button>
+            </Link>
           </div>
         </div>
       </Container>

@@ -76,7 +76,7 @@ export const MockInterviewPage = () => {
             </AlertTitle>
             <AlertDescription className="text-sm text-sky-700 mt-1 leading-relaxed">
               Press "Record Answer" to begin answering the question. Once you
-              finish the interview, you&apos;ll receive feedback comparing your
+              finish the Test, you&apos;ll receive feedback comparing your
               responses with the ideal answers.
               <br />
               <br />

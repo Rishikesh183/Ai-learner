@@ -8,11 +8,36 @@ app.use(json());
 
 app.get("/search", async (req, res) => {
   const { query } = req.query;
+
+  if (!query) {
+    return res.status(400).json({ error: "Missing query parameter" });
+  }
+
   try {
-    const response = await axios.get(`https://serpapi.com/search.json?q=${query}&api_key=079f801083b7e05ed1492665177c68d973ae51a3eee65e291971666c49c990be`);
+    const response = await axios.post(
+      "https://api.tavily.com/search",
+      {
+        query,
+        topic: "general",
+        search_depth: "basic",
+        chunks_per_source: 3,
+        max_results: 1,
+        days: 7,
+        include_answer: true,
+        include_raw_content: true,
+      },
+      {
+        headers: {
+          Authorization: "Bearer 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",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
     res.json(response.data);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch data" });
+    console.error("Tavily API error:", error?.response?.data || error.message);
+    res.status(500).json({ error: "Failed to fetch data from Tavily" });
   }
 });
 

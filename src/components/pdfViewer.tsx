@@ -1,11 +1,13 @@
 import { useState, FC, useEffect } from 'react';
-
+import { Save } from 'lucide-react';
 interface PDFViewerProps {
   content?: string;
   generatePDF: () => void;
+  savePDF: () => void;
 }
 
-const PDFViewer: FC<PDFViewerProps> = ({ content = '', generatePDF }) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const PDFViewer: FC<PDFViewerProps> = ({ content = '', generatePDF, savePDF }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pages, setPages] = useState<string[]>([]);
 
@@ -159,18 +161,27 @@ const PDFViewer: FC<PDFViewerProps> = ({ content = '', generatePDF }) => {
         </div>
       </div>
 
-      {/* Download button */}
-      <button
-        onClick={generatePDF}
-        className="mt-6 flex items-center bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="7 10 12 15 17 10"></polyline>
-          <line x1="12" y1="15" x2="12" y2="3"></line>
-        </svg>
-        Download PDF
-      </button>
+      <div className='flex gap-3'>
+        <button
+          onClick={generatePDF}
+          className="mt-6 flex items-center bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+          Download PDF
+        </button>
+
+        <button
+          onClick={savePDF}
+          className="mt-6 flex gap-1 items-center bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200"
+        >
+          <Save/>
+          save PDF
+        </button>
+      </div>
     </div>
   );
 };

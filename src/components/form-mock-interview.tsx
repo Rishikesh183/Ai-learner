@@ -63,7 +63,7 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
 
   const title = initialData
     ? initialData.position
-    : "Create a new mock interview";
+    : "Create a new mock Test";
 
   const breadCrumpPage = initialData ? initialData?.position : "Create";
   const actions = initialData ? "Save Changes" : "Create";
