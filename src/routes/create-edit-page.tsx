@@ -14,7 +14,9 @@ export const CreateEditPage = () => {
       if (interviewId) {
         try {
           const interviewDoc = await getDoc(doc(db, "interviews", interviewId));
+          // console.log(2);
           if (interviewDoc.exists()) {
+            // console.log(1);
             setInterview({
               id: interviewDoc.id,
               ...interviewDoc.data(),
@@ -29,6 +31,8 @@ export const CreateEditPage = () => {
     fetchInterview();
   }, [interviewId]);
 
+
+  // console.log(interview,"from edit page");
   return (
     <div className="my-4 flex-col w-full">
       <FormMockInterview initialData={interview} />

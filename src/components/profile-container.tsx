@@ -1,27 +1,36 @@
-import { useAuth, UserButton } from "@clerk/clerk-react";
-import { Loader } from "lucide-react";
+import { useAuth } from "../authContext";
+// import { Loader } from "lucide-react";
 import { Button } from "./ui/button";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const ProfileContainer = () => {
-  const { isSignedIn, isLoaded } = useAuth();
+  const { isSignedIn, user, logout } = useAuth();
 
-  if (!isLoaded) {
-    return (
-      <div className="flex items-center">
-        <Loader className="min-w-4 min-h-4 animate-spin text-emerald-500" />
-      </div>
-    );
+  const navigate = useNavigate();
+  const navigateToSignUP = () => {
+    navigate("/register")
   }
+
+  // if (!user) {
+  //   return <Loader className="animate-spin text-emerald-500" />;
+  // }
+
+  // if(!isSignedIn){
+  //   navigate("/register")
+  // }
+  
 
   return (
     <div className="flex items-center gap-6">
       {isSignedIn ? (
-        <UserButton afterSignOutUrl="/" />
+        <div className="flex items-center gap-5">
+          <span className="font-semibold">Hi {user?.username}</span>
+          <Button size="sm" className="bg-red-500" onClick={logout}>
+            Logout
+          </Button>
+        </div>
       ) : (
-        <Link to={"/signin"}>
-          <Button size={"sm"}>Get Started</Button>
-        </Link>
+          <Button size="sm" onClick={navigateToSignUP}>Get Started</Button>
       )}
     </div>
   );

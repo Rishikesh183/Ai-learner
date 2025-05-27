@@ -1,10 +1,17 @@
 import express, { json } from "express";
 import cors from "cors";
 import axios from "axios";
+import authRouter from "./routes/auth.router.js"
+import connectDB from "./config/dbConfig.js";
+
 
 const app = express();
 app.use(cors());
 app.use(json());
+app.use('/api/auth',authRouter);
+app.use('/api/auth',authRouter);
+
+connectDB();
 
 app.get("/search", async (req, res) => {
   const { query } = req.query;

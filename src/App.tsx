@@ -17,6 +17,8 @@ import { Feedback } from "./routes/feedback";
 import Learn from "./components/learn";
 import Practice from "./components/practice";
 import Notes from "./components/notes";
+import Register from "./auth/Register.js";
+import Login from "./auth/Login.js";
 
 const App = () => {
   return (
@@ -25,6 +27,8 @@ const App = () => {
         {/* public routes */}
         <Route element={<PublicLayout />}>
           <Route index element={<HomePage />} />
+          <Route path="/register" element={<Register/>} />
+          <Route path="/login" element={<Login/>} />
         </Route>
 
         {/* authentication layout */}

@@ -1,6 +1,6 @@
 import { db } from "@/config/firebase.config";
 import { Interview, UserAnswer } from "@/types";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth } from "../authContext";
 import {
   collection,
   doc,
@@ -32,14 +32,14 @@ export const Feedback = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [feedbacks, setFeedbacks] = useState<UserAnswer[]>([]);
   const [activeFeed, setActiveFeed] = useState("");
-  const { userId } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   if (!interviewId) {
     navigate("/generate", { replace: true });
   }
   useEffect(() => {
-    if (interviewId) {
+    if (interviewId && user?.id) {
       const fetchInterview = async () => {
         if (interviewId) {
           try {
@@ -61,9 +61,10 @@ export const Feedback = () => {
       const fetchFeedbacks = async () => {
         setIsLoading(true);
         try {
+          console.log("Querying with userId:", user?.id, "mockIdRef:", interviewId);
           const querSanpRef = query(
             collection(db, "userAnswers"),
-            where("userId", "==", userId),
+            where("user.id", "==", user?.id),
             where("mockIdRef", "==", interviewId)
           );
 
@@ -72,7 +73,7 @@ export const Feedback = () => {
           const interviewData: UserAnswer[] = querySnap.docs.map((doc) => {
             return { id: doc.id, ...doc.data() } as UserAnswer;
           });
-
+          console.log("Fetched feedbacks:", interviewData);
           setFeedbacks(interviewData);
         } catch (error) {
           console.log(error);
@@ -86,7 +87,7 @@ export const Feedback = () => {
       fetchInterview();
       fetchFeedbacks();
     }
-  }, [interviewId, navigate, userId]);
+  }, [interviewId, user?.id, navigate]);
 
   //   calculate the ratings out of 10
 

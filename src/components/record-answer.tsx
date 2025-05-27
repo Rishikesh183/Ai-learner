@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth } from "../authContext";
 import {
   CircleStop,
   Loader,
@@ -61,7 +60,7 @@ export const RecordAnswer = ({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { userId } = useAuth();
+  const { user } = useAuth();
   const { interviewId } = useParams();
 
   const recordUserAnswer = async () => {
@@ -72,16 +71,16 @@ export const RecordAnswer = ({
         toast.error("Error", {
           description: "Your answer should be more than 30 characters",
         });
-
         return;
       }
 
-      //   ai result
+      console.log("Calling generateResult with:", userAnswer);
       const aiResult = await generateResult(
         question.question,
         question.answer,
         userAnswer
       );
+      console.log("AI result returned:", aiResult);
 
       setAiResult(aiResult);
     } else {
@@ -119,14 +118,16 @@ export const RecordAnswer = ({
     `;
 
     try {
+      console.log("About to call chatSession.sendMessage");
       const aiResult = await chatSession.sendMessage(prompt);
+      console.log("chatSession.sendMessage returned:", aiResult);
 
       const parsedResult: AIResponse = cleanJsonResponse(
         aiResult.response.text()
       );
       return parsedResult;
     } catch (error) {
-      console.log(error);
+      console.log("Error in generateResult:", error);
       toast("Error", {
         description: "An error occurred while generating feedback.",
       });
@@ -138,6 +139,7 @@ export const RecordAnswer = ({
 
   const recordNewAnswer = () => {
     setUserAnswer("");
+    setAiResult(null);
     stopSpeechToText();
     startSpeechToText();
   };
@@ -155,7 +157,7 @@ export const RecordAnswer = ({
 
       const userAnswerQuery = query(
         collection(db, "userAnswers"),
-        where("userId", "==", userId),
+        where("userId", "==", user),
         where("question", "==", currentQuestion)
       );
 
@@ -178,7 +180,7 @@ export const RecordAnswer = ({
           user_ans: userAnswer,
           feedback: aiResult.feedback,
           rating: aiResult.ratings,
-          userId,
+          user,
           createdAt: serverTimestamp(),
         });
 
@@ -206,6 +208,14 @@ export const RecordAnswer = ({
 
     setUserAnswer(combineTranscripts);
   }, [results]);
+
+  useEffect(() => {
+    console.log("aiResult changed:", aiResult);
+  }, [aiResult]);
+
+  useEffect(() => {
+    console.log("userAnswer changed:", userAnswer);
+  }, [userAnswer]);
 
   return (
     <div className="w-full flex flex-col items-center gap-8 mt-4">
@@ -270,7 +280,7 @@ export const RecordAnswer = ({
             )
           }
           onClick={() => setOpen(!open)}
-          disbaled={!aiResult}
+          disabled={!aiResult}
         />
       </div>
 

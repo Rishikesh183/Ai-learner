@@ -5,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { db } from "@/config/firebase.config";
 import { Interview } from "@/types";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth } from "../authContext";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -15,13 +15,14 @@ import { toast } from "sonner";
 export const Dashboard = () => {
   const [interviews, setInterviews] = useState<Interview[]>([]);
   const [loading, setLoading] = useState(false);
-  const { userId } = useAuth();
+  const { user } = useAuth();
 
+  // console.log(interviews);
   useEffect(() => {
     setLoading(true);
     const interviewQuery = query(
       collection(db, "interviews"),
-      where("userId", "==", userId)
+      where("userId", "==", user?.id)
     );
 
     const unsubscribe = onSnapshot(
@@ -47,7 +48,7 @@ export const Dashboard = () => {
     );
 
     return () => unsubscribe();
-  }, [userId]);
+  }, [user]);
 
   return (
     <>

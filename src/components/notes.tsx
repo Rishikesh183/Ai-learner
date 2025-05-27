@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Trash, Check, Save } from "lucide-react";
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "../authContext";
 import { db } from "@/config/firebase.config";
 import { collection, addDoc, getDocs, deleteDoc, updateDoc, doc, query, where } from "firebase/firestore";
 
 const Notes = () => {
-    const { user } = useUser();
+    const { user } = useAuth();
     const [note, setNote] = useState("");
     const [notesList, setNotesList] = useState<{ id: string; text: string; isCompleted: boolean }[]>([]);
 

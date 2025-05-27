@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth } from "../authContext";
 import { Container } from "./container";
 import { LogoContainer } from "./logo-container";
 import { NavigationRoutes } from "./navigation-routes";
@@ -8,7 +8,8 @@ import { ProfileContainer } from "./profile-container";
 import { ToggleContainer } from "./toggle-container";
 
 const Header = () => {
-  const { userId } = useAuth();
+  const { user } = useAuth();
+  
 
   return (
     <header
@@ -22,7 +23,7 @@ const Header = () => {
           {/* navigation section */}
           <nav className="hidden md:flex items-center gap-3">
             <NavigationRoutes />
-            {userId && (
+            {user && (
               <NavLink
                 to={"/generate"}
                 className={({ isActive }) =>
@@ -40,10 +41,11 @@ const Header = () => {
           <div className="ml-auto flex items-center gap-6">
             {/* profile section */}
             <ProfileContainer />
-
             {/* mobile toggle section */}
             <ToggleContainer />
           </div>
+        </div>
+        <div>
         </div>
       </Container>
     </header>

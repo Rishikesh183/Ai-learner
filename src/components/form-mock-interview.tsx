@@ -7,7 +7,7 @@ import { Interview } from "@/types";
 import { CustomBreadCrumb } from "./custom-bread-crumb";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth } from "../authContext";
 import { toast } from "sonner";
 import { Headings } from "./headings";
 import { Button } from "./ui/button";
@@ -59,7 +59,7 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
   const { isValid, isSubmitting } = form.formState;
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { userId } = useAuth();
+  const { user } = useAuth();
 
   const title = initialData
     ? initialData.position
@@ -141,7 +141,7 @@ export const FormMockInterview = ({ initialData }: FormMockInterviewProps) => {
 
           await addDoc(collection(db, "interviews"), {
             ...data,
-            userId,
+            userId: user?.id,
             questions: aiResult,
             createdAt: serverTimestamp(),
           });
