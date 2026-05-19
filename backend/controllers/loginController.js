@@ -11,6 +11,7 @@ const loginController = async (req, res) => {
 
     const decryptedBytes = CryptoJS.AES.decrypt(user.password, process.env.PASSWORD_SECRET_KEY || "Rishi@183");
     const originalPassword = decryptedBytes.toString(CryptoJS.enc.Utf8);
+    console.log("Decrypted password:", originalPassword); // Debugging log
 
     if (originalPassword !== password) {
       return res.status(400).json({ error: "Invalid credentials" });

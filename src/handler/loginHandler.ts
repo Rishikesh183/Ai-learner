@@ -7,7 +7,7 @@ interface LoginParams {
 
 const LoginHandler = async ({ email, password }: LoginParams) => {
   try {
-    const response = await axios.post("http://localhost:5000/api/auth/login", {
+    const response = await axios.post("https://ai-learner-backend.onrender.com/api/auth/login", {
       email,
       password,
     });
@@ -17,7 +17,7 @@ const LoginHandler = async ({ email, password }: LoginParams) => {
     return { user, token };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || "Login failed");
+    throw new Error(error.response?.data?.message || error.response?.data?.error || "Login failed");
   }
 };
 

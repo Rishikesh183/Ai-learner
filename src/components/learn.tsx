@@ -54,7 +54,7 @@ const Learn = () => {
             Now return your response in the strict format above.`;
 
             try {
-                const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+                const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
                 const result = await model.generateContent(prompt);
                 const response = await result.response.text();
                 const cleanedResponse = response.replace(/```json|```/g, "").trim();
@@ -82,7 +82,7 @@ const Learn = () => {
             Now return your response in the strict format above.`;
 
         try {
-            const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+            const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
             const result = await model.generateContent(prompt);
             const response = await result.response.text();
 
@@ -208,7 +208,7 @@ Make the content engaging, practical, and easy to understand. Include real-world
         if (!topic) return;
         setLoading(true);
         try {
-            const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+            const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
             const prompt = customPrompt || generateAdvancedPrompt();
 
             const result = await model.generateContent(prompt);

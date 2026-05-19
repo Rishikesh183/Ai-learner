@@ -22,7 +22,7 @@ const Practice: React.FC = () => {
     setContent([]);
 
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       const prompt = `As an experienced prompt engineer, generate a JSON array containing 5 technical interview questions along with short answers based on ${topic}. Each object in the array should have the fields "question" and "answer", formatted as follows:
 
         [
