@@ -1,13 +1,17 @@
 import { useState, FC, useEffect } from 'react';
 import { Save } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
 interface PDFViewerProps {
   content?: string;
   generatePDF: () => void;
   savePDF: () => void;
+  pdfUrl?: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const PDFViewer: FC<PDFViewerProps> = ({ content = '', generatePDF, savePDF }) => {
+const PDFViewer: FC<PDFViewerProps> = ({ content = '', generatePDF, savePDF, pdfUrl }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pages, setPages] = useState<string[]>([]);
 
@@ -82,8 +86,7 @@ const PDFViewer: FC<PDFViewerProps> = ({ content = '', generatePDF, savePDF }) =
   };
 
   return (
-    <div className="mt-8 flex flex-col items-center">
-      <h2 className="text-2xl font-semibold mb-4">Generated Study Material</h2>
+    <div className="mt-4 flex flex-col items-center">
 
       {/* PDF-like container */}
       <div className="w-[30vw] h-[35vh] max-w-3xl shadow-lg overflow-hidden">
@@ -107,9 +110,11 @@ const PDFViewer: FC<PDFViewerProps> = ({ content = '', generatePDF, savePDF }) =
           <div className="absolute inset-0 bg-gradient-to-r from-gray-50 to-white opacity-50 pointer-events-none"></div>
 
           {/* Actual content */}
-          <div className="p-8 min-h-[70vh] max-h-[70vh] overflow-hidden relative">
-            <div className="whitespace-pre-line text-gray-800 font-serif leading-relaxed">
-              {pages[currentPage - 1] || ''}
+          <div className="p-8 min-h-[70vh] max-h-[70vh] overflow-y-auto relative">
+            <div className="prose prose-sm max-w-none text-gray-800 font-serif leading-relaxed">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {pages[currentPage - 1] || ''}
+              </ReactMarkdown>
             </div>
 
             {/* Page number watermark */}
@@ -161,7 +166,7 @@ const PDFViewer: FC<PDFViewerProps> = ({ content = '', generatePDF, savePDF }) =
         </div>
       </div>
 
-      <div className='flex gap-3'>
+      <div className='flex gap-3 flex-wrap justify-center'>
         <button
           onClick={generatePDF}
           className="mt-6 flex items-center bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200"
@@ -179,8 +184,28 @@ const PDFViewer: FC<PDFViewerProps> = ({ content = '', generatePDF, savePDF }) =
           className="mt-6 flex gap-1 items-center bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200"
         >
           <Save/>
-          save PDF
+          Save PDF
         </button>
+
+        {pdfUrl && (
+          <button
+            onClick={() => {
+              const byteString = atob(pdfUrl.split(',')[1]);
+              const ab = new ArrayBuffer(byteString.length);
+              const ia = new Uint8Array(ab);
+              for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i);
+              const blob = new Blob([ab], { type: 'application/pdf' });
+              window.open(URL.createObjectURL(blob), '_blank');
+            }}
+            className="mt-6 flex gap-1 items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium transition-colors duration-200"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+            </svg>
+            View PDF
+          </button>
+        )}
       </div>
     </div>
   );

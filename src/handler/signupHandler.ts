@@ -10,7 +10,7 @@ interface SignupParams {
 const signupHandler = async ({ username, number, email, Password }: SignupParams): Promise<void> => {
   try {
     const response = await axios.post(
-      "https://ai-learner-backend.onrender.com/api/auth/register",
+      "http://localhost:5000/api/auth/register",
       {
         username,
         number,

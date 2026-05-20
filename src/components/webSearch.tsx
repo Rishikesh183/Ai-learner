@@ -14,7 +14,7 @@ const WebSearch = ({ topic }: { topic: string }) => {
     const fetchQuestions = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`https://ai-learner-backend.onrender.com/search?query=${topic}`);
+        const response = await fetch(`http://localhost:5000/search?query=${topic}`);
         const data = await response.json();
         console.log(data);
 
